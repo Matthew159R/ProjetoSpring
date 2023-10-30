@@ -3,6 +3,6 @@
     <fullyQualifiedTypeName name="jakarta.persistence.Table"/>
     <fullyQualifiedTypeName name="jakarta.persistence.Id"/>
     <fullyQualifiedTypeName name="jakarta.persistence.GenerationType"/>
-    <fullyQualifiedTypeName name="com.example.demo.entities.Category"/>
     <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="com.example.demo.entities.Category"/>
 </qualifiedTypeNameHistroy>
