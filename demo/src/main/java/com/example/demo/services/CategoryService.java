@@ -10,29 +10,15 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.CategoryDTO;
 import com.example.demo.entities.Category;
 import com.example.demo.repositories.CategoryRepository;
+import com.example.demo.services.exceptions.EntityNotFoundException;
 
 @Service
 public class CategoryService {
 
 	@Autowired
 	private CategoryRepository repository;
-	private int numberOfCategories;
+	
 	// @Transactional(readOnly = true)
-	
-    public CategoryService(CategoryRepository repository) {
-        this.repository = repository;
-        initializeNumberOfCategories();
-    }
-
-    private void initializeNumberOfCategories() {
-        List<Category> list = repository.findAll();
-        numberOfCategories = list.size();
-    }
-
-    public int getNumberOfCategories() {
-        return numberOfCategories;
-    }
-	
 	public List<CategoryDTO> findAll()
 	{
 		List<Category> list = repository.findAll();
@@ -45,7 +31,7 @@ public class CategoryService {
 	// @Transactional(readOnly = true)
 	public CategoryDTO findById(Long id) {
 		Optional<Category> obj = repository.findById(id);
-		Category entity = obj.get();
+		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
 		return new CategoryDTO(entity);
 	}
 }

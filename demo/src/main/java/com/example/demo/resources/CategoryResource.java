@@ -3,7 +3,6 @@ package com.example.demo.resources;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,39 +29,9 @@ public class CategoryResource {
 	@GetMapping(value="/{id}")
 	public ResponseEntity<?> findCategoryById(@PathVariable Long id)
 	{
-		if (id > service.getNumberOfCategories())
-		{
-			String errorMessage = "Categoria não encontrada ";
-			String errorDetails = "[O número de categorias só vai até " + service.getNumberOfCategories() + "]";
-			ErrorResponse errorResponse = new ErrorResponse(errorMessage, errorDetails);
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body(errorResponse.getErrorMessage() + errorResponse.getErrorDetails());			
-		}else 
-		{
-			CategoryDTO category = service.findById(id);
-			
-			return ResponseEntity.ok().body(category);
-		}
+		CategoryDTO categoryById = service.findById(id);
+		return ResponseEntity.ok().body(categoryById);
+
 	}
 }
 
-class ErrorResponse {
-	private String errorMessage;
-	private String errorDetails;
-	
-	public ErrorResponse(String errorMessage, String errorDetails)
-	{
-		this.errorMessage = errorMessage;
-		this.errorDetails = errorDetails;
-	}
-	
-	public String getErrorMessage ()
-	{
-		return errorMessage;
-	}
-	public String getErrorDetails ()
-	{
-		return errorDetails;
-	}
-}
