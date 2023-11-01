@@ -1,16 +1,21 @@
 package com.example.demo.resources;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.demo.dto.CategoryDTO;
 import com.example.demo.services.CategoryService;
+import com.example.demo.services.ategoryDTO;
 
 @RestController
 @RequestMapping(value = "/categorias")
@@ -32,6 +37,16 @@ public class CategoryResource {
 		CategoryDTO categoryById = service.findById(id);
 		return ResponseEntity.ok().body(categoryById);
 
+	}
+	
+	@PostMapping
+	public ResponseEntity<CategoryDTO> insertCategory(@RequestBody CategoryDTO dtoInsert)
+	{
+		dtoInsert = service.insert(dtoInsert);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(dtoInsert.getId()).toUri();
+		
+		return ResponseEntity.created(uri).body(dtoInsert);
 	}
 }
 
