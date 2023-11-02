@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.example.demo.dto.CategoryDTO;
 import com.example.demo.entities.Category;
 import com.example.demo.repositories.CategoryRepository;
-import com.example.demo.services.exceptions.EntityNotFoundException;
+import com.example.demo.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -31,14 +33,24 @@ public class CategoryService {
 	// @Transactional(readOnly = true)
 	public CategoryDTO findById(Long id) {
 		Optional<Category> obj = repository.findById(id);
-		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entidade não encontrada"));
+		Category entity = obj.orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 		return new CategoryDTO(entity);
 	}
 
 	public CategoryDTO insert(CategoryDTO dto) {
 		Category entity = new Category();
 		entity.setName(dto.getName());
+		repository.save(entity);
+		return new CategoryDTO(entity);
+	}
+
+	public CategoryDTO update(Long id, CategoryDTO dtoUpdate) 
+	{
+		Category entity = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Id not found " + id));
+		entity.setName(dtoUpdate.getName());
 		entity = repository.save(entity);
+		
 		return new CategoryDTO(entity);
 	}
 }
